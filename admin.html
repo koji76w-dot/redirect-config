@@ -1,1 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <style>
+    body { margin:0; background:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; }
+    form { display:flex; flex-direction:column; gap:12px; width:320px; }
+    input, button { padding:10px; font-size:16px; }
+    #status { font-size:14px; color:#333; }
+  </style>
+</head>
+<body>
+  <form id="adminForm">
+    <input type="password" id="pwd" placeholder="Password" required />
+    <input type="url" id="url" placeholder="New redirect URL" required />
+    <button type="submit">Update</button>
+    <div id="status"></div>
+  </form>
+
+  <script>
+    const scrambled = "1aa4bb2cc3dd5eeabb"; 
+    let KEY = "";
+    for (let i = 0; i < scrambled.length; i += 3) {
+      KEY += scrambled[i];
+    }
+
+    const status = document.getElementById("status");
+    const form = document.getElementById("adminForm");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const pwd = document.getElementById("pwd").value;
+      const url = document.getElementById("url").value;
+
+      if (pwd !== KEY) {
+        status.textContent = "Invalid password.";
+        return;
+      }
+
+      status.innerHTML = `
+        1) Open <a href="./config.json" target="_blank">config.json</a>.<br>
+        2) Click "Edit this file".<br>
+        3) Replace content with:<br>
+        <pre>{ "redirect": "${url.replace(/"/g, '\\"')}" }</pre>
+        4) Click "Commit changes".<br>
+        Done — the redirect page will now use the new URL.
+      `;
+    });
+  </script>
+</body>
+</html>
 
